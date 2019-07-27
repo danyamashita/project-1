@@ -29,25 +29,25 @@ const myGame = {
 myGame.drawBoard();
 myGame.piecesOnBoard();
 
-const casas = document.querySelectorAll('.board');
+const square = document.querySelectorAll('.board');
 
-casas[1].classList.toggle('red');
+square[1].classList.toggle('red');
 let savedClasses = [];
 let savedIndex = [];
 
-casas.forEach((element, index) => {
+square.forEach((element, index) => {
   element.onclick = function (e) {
     savedClasses.push(element.classList.value.split(" "));
     savedIndex.push(index);
     if (savedIndex.length === 2) {
-      casas[savedIndex[0]].classList = '';
-      casas[savedIndex[1]].classList = '';
+      square[savedIndex[0]].classList = '';
+      square[savedIndex[1]].classList = '';
 
       savedClasses[0].forEach((classe) => {
-        casas[savedIndex[1]].classList.add(classe);
+        square[savedIndex[1]].classList.add(classe);
       });
       savedClasses[1].forEach((classe) => {
-        casas[savedIndex[0]].classList.add(classe);
+        square[savedIndex[0]].classList.add(classe);
       });
       savedClasses=[]
       savedIndex=[]
