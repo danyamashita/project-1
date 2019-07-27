@@ -9,7 +9,7 @@ const cards = [
     name: 'Sargento', qty: 2, level: 3, img: '',
   },
   {
-    name: 'flag', qty: 1, level: 0, img: '',
+    name: 'Flag', qty: 1, level: 0, img: '',
   },
 ];
 
@@ -51,6 +51,7 @@ class frontGame {
     const column2 = endPosition % this.boardWidth;
     this.board[line2][column2] = initial;
     this.boardPlayer[player][initialPosition] = null;
+    console.log("player", this.boardPlayer, "board", this.board)
   }
 
   movePiece(initialPosition, endPosition) {
@@ -62,6 +63,7 @@ class frontGame {
     const final = this.board[line2][column2];
     this.board[line2][column2] = initial;
     this.board[line1][column1] = final;
+    console.log("board", this.board)
   }
 
   checkInitial(initial) {
@@ -77,42 +79,45 @@ class frontGame {
       return false;
     }
     // can only move to empty squares or enemy square
-    if(this.board[line2][column2]===null){
-      return true
+    if (this.board[line2][column2] === null) {
+      return true;
+    }
+    if (this.board[line2][column2].player === this.playerTurn) {
+      console.log(this.board[line2][column2].player, 'player');
+      return false;
     } else {
-      if (this.board[line2][column2].player === this.playerTurn) {
-        //console.log(this.board[line2][column2].player, 'player');
-        return false;
-      } else {
-        this.confront()
-      }
+      this.confront();
     }
   }
 
 
-  confront() {
-    let attacker = this.board[line1][column1];
-    let defender = this.board[line2][column2]
-    console.log(`Player ${attacker.player} shows a ${attacker.name} and Player ${defender.player} shows a ${defender.name}`)
-    if(attacker.level > defender.level){
-      this.board[line2][column2]=attacker
-      console.log(`Attack was sucessful`)
+  confront(line1, column1, line2, column2) {
+    const attacker = this.board[line1][column1];
+    const defender = this.board[line2][column2];
+
+    if (defender.level === 0) {
+      return false;
+    }
+    console.log(`Player ${attacker.player} shows a ${attacker.name} and Player ${defender.player} shows a ${defender.name}`);
+    if (attacker.level > defender.level) {
+      this.board[line2][column2] = attacker;
+      console.log('Attack was sucessful');
     } else {
-      console.log('Defence was sucessful')
+      console.log('Defence was sucessful');
     }
 
-    this.board[line1][column1] = null
+    this.board[line1][column1] = null;
     // if square has enemy piece, turn pieces to check who has higher rank
     // remove piece from board and put into playerboard
     // if piece is the flag, game is over
   }
 }
 
-const game = new frontGame(5, 5);
-game.populatePlayerField();
 
 // game.movePiece();
-
+// const game = new frontGame(5, 5);
+// game.populatePlayerField();
+/*
 game.board = [
   [cards[1], null, null, null, null],
   [null, null, null, null, null],
@@ -131,3 +136,4 @@ game.movePiece(5, 1);
 console.log(game.board);
 
 console.log(game.checkFinal(1, 1, 0, 1));
+*/
