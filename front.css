@@ -68,3 +68,15 @@ body{
 .blocked {
   pointer-events: none;
 }
+
+.Player1 {
+  border: solid 2px red
+}
+
+.Player2 {
+  border: solid 2px darkblue
+}
+
+.active {
+  border: solid 4px
+}

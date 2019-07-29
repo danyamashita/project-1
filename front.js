@@ -37,8 +37,8 @@ class frontGame {
     let count = 0;
     for (let i = 0; i < cards.length; i++) {
       for (let j = 0; j < cards[i].qty; j++) {
-        this.boardPlayer[0].push({ name: cards[i].name, level: cards[i].level, player: 1 });
-        this.boardPlayer[1].push({ name: cards[i].name, level: cards[i].level, player: 2 });
+        this.boardPlayer[0].push({ name: cards[i].name, level: cards[i].level, player: 'Player1' });
+        this.boardPlayer[1].push({ name: cards[i].name, level: cards[i].level, player: 'Player2' });
         count += 1;
       }
     }
@@ -46,13 +46,22 @@ class frontGame {
   }
 
   positionPiece(initialPosition, endPosition, player) { // initial position of pieces
-    const initial = this.boardPlayer[player][initialPosition];
+    let playerIndex;
+    if (player === 'Player1') {
+      playerIndex = 0;
+    } else {
+      playerIndex = 1;
+    }
+    const initial = this.boardPlayer[playerIndex][initialPosition];
     const line2 = Math.floor(endPosition / this.boardWidth);
     const column2 = endPosition % this.boardWidth;
+
+
     this.board[line2][column2] = initial;
-    this.boardPlayer[player][initialPosition] = null;
-    console.log("player", this.boardPlayer, "board", this.board)
+    this.boardPlayer[playerIndex][initialPosition] = null;
+    console.log('Position player', this.boardPlayer, 'board', this.board);
   }
+
 
   movePiece(initialPosition, endPosition) {
     const line1 = Math.floor(initialPosition / this.boardWidth);
@@ -63,53 +72,56 @@ class frontGame {
     const final = this.board[line2][column2];
     this.board[line2][column2] = initial;
     this.board[line1][column1] = final;
-    console.log("board", this.board)
+    console.log('Move board', this.board);
   }
 
-  checkInitial(initial) {
-    // can only select its own pieces
-    if (initial.player === playerTurn) {
-      return true;
-    }
-  }
-
-  checkFinal(line1, column1, line2, column2) {
+  checkDistance(initialPosition, endPosition) {
     // can only move to adjacent squares
+    const line1 = Math.floor(initialPosition / this.boardWidth);
+    const column1 = initialPosition % this.boardWidth;
+    const line2 = Math.floor(endPosition / this.boardWidth);
+    const column2 = endPosition % this.boardWidth;
     if (Math.abs(line1 - line2) > 1 || Math.abs(column1 - column2) > 1) {
       return false;
     }
-    // can only move to empty squares or enemy square
+    return true;
+  }
+
+  checkIfEmpty(endPosition) {
+    const line2 = Math.floor(endPosition / this.boardWidth);
+    const column2 = endPosition % this.boardWidth;
     if (this.board[line2][column2] === null) {
       return true;
-    }
-    if (this.board[line2][column2].player === this.playerTurn) {
-      console.log(this.board[line2][column2].player, 'player');
-      return false;
-    } else {
-      this.confront();
     }
   }
 
 
-  confront(line1, column1, line2, column2) {
+  confront(attackerPosition, defenderPosition) {
+    const line1 = Math.floor(attackerPosition / this.boardWidth);
+    const column1 = attackerPosition % this.boardWidth;
+    const line2 = Math.floor(defenderPosition / this.boardWidth);
+    const column2 = defenderPosition % this.boardWidth;
     const attacker = this.board[line1][column1];
     const defender = this.board[line2][column2];
 
     if (defender.level === 0) {
-      return false;
+      console.log('Atacante capturou a bandeira e venceu')
+      return 0;
     }
     console.log(`Player ${attacker.player} shows a ${attacker.name} and Player ${defender.player} shows a ${defender.name}`);
     if (attacker.level > defender.level) {
       this.board[line2][column2] = attacker;
+      this.board[line1][column1] = null;
       console.log('Attack was sucessful');
+      console.log(game.board)
+      return 1
+      
     } else {
       console.log('Defence was sucessful');
+      console.log(game.board)
+      this.board[line1][column1]=null
+      return 2
     }
-
-    this.board[line1][column1] = null;
-    // if square has enemy piece, turn pieces to check who has higher rank
-    // remove piece from board and put into playerboard
-    // if piece is the flag, game is over
   }
 }
 
