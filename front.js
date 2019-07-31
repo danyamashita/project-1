@@ -1,27 +1,31 @@
-const cards = [
-  {
-    name: 'Cabo', qty: 1, level: 2, img: '',
-  },
-  {
-    name: 'Soldier', qty: 2, level: 1, img: '',
-  },
-  {
-    name: 'Sargento', qty: 2, level: 3, img: '',
-  },
-  {
-    name: 'Flag', qty: 1, level: 0, img: '',
-  },
-];
-
-
 class frontGame {
-  constructor(width, height) {
+  constructor(width, height, numberOfCards) {
     this.boardWidth = width;
     this.boardHeight = height;
     this.board = [];
     this.boardPlayer = [[], []];
-    this.numberOfCards = 0;
+    this.numberOfCards = numberOfCards;
+    this.numberOfDifusers = Math.round(this.numberOfCards / 4);
+    this.numberOfSergeants = Math.ceil(this.numberOfCards / 10);
+    this.numberOfBombs = Math.round(this.numberOfCards / 5);
     this.playerTurn = 1;
+    this.cards = [
+      {
+        name: 'BombDefuser', qty: this.numberOfDifusers, level: 1, img: '',
+      },
+      {
+        name: 'Sergeant', qty: this.numberOfSergeants, level: 3, img: '',
+      },
+      {
+        name: 'Flag', qty: 1, level: 0, img: '',
+      },
+      {
+        name: 'Bomb', qty: this.numberOfBombs, level: 0, img: '',
+      },
+      {
+        name: 'Soldier', qty: this.numberOfCards - this.numberOfDifusers - this.numberOfSergeants - this.numberOfBombs - 1, level: 1, img: '',
+      },
+    ];
   }
 
   createBoard() {
@@ -34,15 +38,12 @@ class frontGame {
   }
 
   populatePlayerField() {
-    let count = 0;
-    for (let i = 0; i < cards.length; i++) {
-      for (let j = 0; j < cards[i].qty; j++) {
-        this.boardPlayer[0].push({ name: cards[i].name, level: cards[i].level, player: 'Player1' });
-        this.boardPlayer[1].push({ name: cards[i].name, level: cards[i].level, player: 'Player2' });
-        count += 1;
+    for (let i = 0; i < this.cards.length; i++) {
+      for (let j = 0; j < this.cards[i].qty; j++) {
+        this.boardPlayer[0].push({ name: this.cards[i].name, level: this.cards[i].level, player: 'Player1' });
+        this.boardPlayer[1].push({ name: this.cards[i].name, level: this.cards[i].level, player: 'Player2' });
       }
     }
-    this.numberOfCards = count;
   }
 
   positionPiece(initialPosition, endPosition, player) { // initial position of pieces
@@ -104,23 +105,38 @@ class frontGame {
     const attacker = this.board[line1][column1];
     const defender = this.board[line2][column2];
 
-    if (defender.level === 0) {
-      console.log('Atacante capturou a bandeira e venceu')
-      return 0;
-    }
-    console.log(`Player ${attacker.player} shows a ${attacker.name} and Player ${defender.player} shows a ${defender.name}`);
-    if (attacker.level > defender.level) {
-      this.board[line2][column2] = attacker;
-      this.board[line1][column1] = null;
-      console.log('Attack was sucessful');
-      console.log(game.board)
-      return 1
-      
-    } else {
-      console.log('Defence was sucessful');
-      console.log(game.board)
-      this.board[line1][column1]=null
-      return 2
+    console.log(`Attacker shows a ${attacker.name} and Defender shows a ${defender.name}`);
+
+    switch (true) {
+      case (defender.name === 'Flag' || attacker.name === 'Flag'):
+        return 0;
+
+      case (defender.name === 'Bomb'):
+        this.board[line1][column1] = null;
+        this.board[line2][column2] = null;
+        console.log(game.board);
+        window.alert('Kaboom!!!');
+        return 4;
+
+      case (attacker.level > defender.level):
+        this.board[line2][column2] = attacker;
+        this.board[line1][column1] = null;
+        window.alert('Attack was sucessful');
+        console.log(game.board);
+        return 1;
+
+      case (attacker.level < defender.level):
+        window.alert('Defence was sucessful');
+        this.board[line1][column1] = null;
+        console.log(game.board);
+        return 2;
+
+      case (attacker.level === defender.level):
+        this.board[line1][column1] = null;
+        this.board[line2][column2] = null;
+        console.log(game.board);
+        window.alert('it was a tied, both died');
+        return 3;
     }
   }
 }

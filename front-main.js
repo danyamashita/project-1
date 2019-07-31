@@ -23,6 +23,11 @@ const myHtml = {
     for (let i = 0; i < game.numberOfCards; i++) {
       this.boardPlayer2.innerHTML += '<div class = "Player2 square"></div>';
     }
+
+    let board = document.getElementById('board')
+    let boardWidth = game.boardWidth*(80+2*10+6); //square size + margin + border
+    board.style.width = `${boardWidth}px`;
+
   },
 
   playerPieces() {
@@ -37,19 +42,22 @@ const myHtml = {
       if (element.classList[0] === player) {
         myHtml.savedClasses.push(element.classList.value.split(' '));
         myHtml.savedIndex.push(index);
+        element.classList.toggle('active')
+        return
         // console.log(myHtml.savedIndex)
       } else {
-        console.log('selecione uma pedra sua');
+        return window.alert(`${player} you can only select your own pieces`);
       }
     }
     if (myHtml.savedIndex.length === 1) {
       // console.log('sucesso', myHtml.savedIndex)
+      
       if (element.classList[0] !== myHtml.players[0] && element.classList[0] !== myHtml.players[1]) {
         myHtml.savedClasses.push(element.classList.value.split(' '));
         myHtml.savedIndex.push(index);
         // console.log(myHtml.savedIndex)
       } else {
-        console.log('Selecione um lugar vazio');
+        window.alert(`${player}, please select an empty spot`);
       }
     }
 
@@ -78,6 +86,16 @@ const myHtml = {
       }
       myHtml.savedClasses = [];
       myHtml.savedIndex = [];
+      if(myHtml.counter === game.numberOfCards){
+        setTimeout(function(){
+          window.alert('Player 2 position your pieces')
+        }, 500)
+      }
+      if(myHtml.counter === 2*game.numberOfCards){
+        setTimeout(function(){
+          window.alert('Time to Battle!')
+        }, 500)
+      }
     }
   } /* end function */,
 
@@ -85,21 +103,36 @@ const myHtml = {
     console.log(player, element, index);
     if (myHtml.savedIndex.length === 0) {
       if (element.classList[0] === player) {
-        myHtml.savedClasses.push(element.classList.value.split(' '));
-        myHtml.savedIndex.push(index - game.numberOfCards);
-        console.log(myHtml.savedIndex);
-        return;
+        const line = Math.floor((index-game.numberOfCards)/ game.boardWidth);
+        const column = (index-game.numberOfCards) % game.boardWidth;
+        if(game.board[line][column].name === 'Bomb' || game.board[line][column].name === 'Flag'){
+          return window.alert(`${player}, Bombs and Flags can not walk`)
+        } else {
+          myHtml.savedClasses.push(element.classList.value.split(' '));
+          myHtml.savedIndex.push(index - game.numberOfCards);
+          element.classList.toggle('active')
+          console.log(myHtml.savedIndex);
+          return;
+        }
       }
-      return console.log('selecione uma pedra sua');
+      return window.alert(`${player} you can only select your own pieces`);
     }
+
     if (myHtml.savedIndex.length === 1) {
+      console.log('index sucesso', index, myHtml.savedIndex[0])
+      if(index - game.numberOfCards === myHtml.savedIndex[0]){
+        element.classList.toggle('active')
+        myHtml.savedClasses = [];
+        myHtml.savedIndex = [];
+        return
+      }
       console.log('sucesso', myHtml.savedIndex, index);
       if (element.classList[0] !== player && game.checkDistance(myHtml.savedIndex[0], index - game.numberOfCards)) {
         myHtml.savedClasses.push(element.classList.value.split(' '));
         myHtml.savedIndex.push(index - game.numberOfCards);
         // console.log(myHtml.savedIndex)
       } else {
-        return console.log('selecione uma casa adjacente que não tenha uma pedra sua');
+        return window.alert(`${player}, you can only walk 1 square at a time`);
       }
     }
 
@@ -118,7 +151,7 @@ const myHtml = {
     } else {
       switch (game.confront(myHtml.savedIndex[0], myHtml.savedIndex[1])) {
         case 0:
-          window.alert('Game over');
+          window.alert(`${player} captured the Flag and won`);
           break;
 
         case 1:
@@ -134,9 +167,11 @@ const myHtml = {
           square[myHtml.savedIndex[0] + game.numberOfCards].classList = 'square';
           break;
 
-        default:
+        case 3:
+        case 4:
           square[myHtml.savedIndex[0] + game.numberOfCards].classList = 'square';
           square[myHtml.savedIndex[1] + game.numberOfCards].classList = 'square';
+          break;
       }
     }
     myHtml.savedClasses = [];
@@ -157,7 +192,7 @@ const myHtml = {
 
 };
 
-const game = new frontGame(5, 5);
+const game = new frontGame(4, 4, 5);
 game.populatePlayerField();
 game.createBoard();
 myHtml.drawBoard();
@@ -167,8 +202,10 @@ const square = document.querySelectorAll('.square');
 const boardPlayer1 = document.querySelectorAll('.Player1');
 const boardPlayer2 = document.querySelectorAll('.Player2');
 
-// myHtml.initialPositioning('Player1');
 
+setTimeout(function(){
+  window.alert('Player 1 position your pieces')
+}, 500)
 square.forEach((element, index) => {
   element.onclick = function () {
     switch (true) {
@@ -180,6 +217,7 @@ square.forEach((element, index) => {
 
       case (myHtml.counter >= game.numberOfCards && myHtml.counter < 2 * game.numberOfCards):
         // player 2 position pieces
+
         myHtml.initialPositioning('Player2', element, index);
         console.log('case2');
         break;
