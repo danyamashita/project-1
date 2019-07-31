@@ -8,22 +8,23 @@ class frontGame {
     this.numberOfDifusers = Math.round(this.numberOfCards / 4);
     this.numberOfSergeants = Math.ceil(this.numberOfCards / 10);
     this.numberOfBombs = Math.round(this.numberOfCards / 5);
+    this.numbersOfOthers = this.numberOfBombs+this.numberOfDifusers+this.numberOfSergeants+1
     this.playerTurn = 1;
     this.cards = [
       {
-        name: 'BombDefuser', qty: this.numberOfDifusers, level: 1, img: '',
+        name: 'BombDefuser', qty: this.numberOfDifusers, level: 2, img: 'bomb.png',
       },
       {
-        name: 'Sergeant', qty: this.numberOfSergeants, level: 3, img: '',
+        name: 'Sergeant', qty: this.numberOfSergeants, level: 3, img: 'sergeant.png',
       },
       {
-        name: 'Flag', qty: 1, level: 0, img: '',
+        name: 'Flag', qty: 1, level: 0, img: 'flag.png',
       },
       {
-        name: 'Bomb', qty: this.numberOfBombs, level: 0, img: '',
+        name: 'Bomb', qty: this.numberOfBombs, level: 0, img: 'bomb.png',
       },
       {
-        name: 'Soldier', qty: this.numberOfCards - this.numberOfDifusers - this.numberOfSergeants - this.numberOfBombs - 1, level: 1, img: '',
+        name: 'Soldier', qty: this.numberOfCards - this.numbersOfOthers, level: 1, img: 'soldier.png',
       },
     ];
   }
