@@ -31,8 +31,8 @@ body{
 }
 
 #left {
-  width: 150px;
-  text-align: left;
+  width: 300px;
+  text-align: right;
   color: white;
   font-weight: bold;
   font-size: 30px;
@@ -43,11 +43,12 @@ ul {
   margin-left: -30px;
   font-size: 20px;
   font-weight: normal;
+  color: light
 }
 
 #right{
-  width: 150px;
-  text-align: center;
+  width: 300px;
+  text-align: left;
   color: white;
   font-weight: bold;
   font-size: 30px;
@@ -71,9 +72,9 @@ ul {
 
 .square {
   background-color: white;
-  width:60px;
-  height: 60px;
-	margin:5px;
+  width:50px;
+  height: 50px;
+	margin:3px;
 	/*padding:20px;*/
   font-size:64px;
   opacity: 0.5;
@@ -87,11 +88,6 @@ ul {
 .Player2 {
   background:  #456783;
   opacity: 1;
-}
-
-.icon{
-  width: 60px;
-  height: 60px;
 }
 
 .BombDefuser {
@@ -171,7 +167,7 @@ ul {
 button{
   margin-top: 50px;
   color: white;
-  background: lightslategray;
+  background: black;
   width: 100px;
   height: 50px;
   border-radius: 2px;

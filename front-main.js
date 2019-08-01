@@ -1,8 +1,6 @@
 
 
-
 document.querySelector('button').onclick = function () {
-
   const myHtml = {
     boardPlayer1: document.querySelector('#player-1'),
     boardPlayer2: document.querySelector('#player-2'),
@@ -14,9 +12,9 @@ document.querySelector('button').onclick = function () {
     savedIndex: [],
 
     drawBoard() {
-      this.boardPlayer1.innerHTML = "";
-      this.boardPlayer2.innerHTML = "";
-      this.board.innerHTML = "";
+      this.boardPlayer1.innerHTML = '';
+      this.boardPlayer2.innerHTML = '';
+      this.board.innerHTML = '';
       for (let i = 0; i < game.numberOfCards; i++) {
         this.boardPlayer1.innerHTML += '<div class = "Player1 square "><div class = icon> </div></div>';
       }
@@ -32,15 +30,15 @@ document.querySelector('button').onclick = function () {
       }
 
       // const board = document.getElementById('board');
-      const boardWidth = game.boardWidth * (60 + 2 * 5 + 6); // square size + margin + border
+      const boardWidth = game.boardWidth * (50 + 2 * 3 + 2); // square size + margin + border
       board.style.width = `${boardWidth}px`;
       this.board.style.width = `${boardWidth}px`;
+      this.board.style.height = `${boardWidth}px`;
       this.boardPlayer1.style.width = `${boardWidth}px`;
       this.boardPlayer2.style.width = `${boardWidth}px`;
     },
 
     playerPieces() {
-
       for (let i = 0; i < game.numberOfCards; i++) {
         this.boardPlayer1.children[i].classList.add(game.boardPlayer[0][i].name);
         this.boardPlayer2.children[i].classList.add(game.boardPlayer[1][i].name);
@@ -51,7 +49,7 @@ document.querySelector('button').onclick = function () {
       const list = document.querySelector('ul');
       list.innerHTML = '';
       for (let k = 0; k < game.cards.length; k++) {
-        list.innerHTML += `<li><img src = "./pictures/${game.cards[k].img}" width=20px height=20px>  ${game.cards[k].name}</li>`;
+        list.innerHTML += `<li><img src = "./pictures/${game.cards[k].img}" width=20px height=20px>    ${game.cards[k].name}</li>`;
       }
     },
 
@@ -83,16 +81,11 @@ document.querySelector('button').onclick = function () {
         square[myHtml.savedIndex[1]].classList = '';
         console.log(this.savedClasses, 'class', square[myHtml.savedIndex[1]].classList[1]);
 
-        /* for(let k=0; k<myHtml.savedIndex-1; k++){
-        square[myHtml.savedIndex[1]].classList.add(myHtml.savedClasses[k]);
-      } */
         myHtml.savedClasses[0].forEach((classe) => {
           square[myHtml.savedIndex[1]].classList.add(classe);
-        // square[myHtml.savedIndex[1]].classList.remove(myHtml.savedClasses[0][2]);
         });
         myHtml.savedClasses[1].forEach((classe) => {
           square[myHtml.savedIndex[0]].classList.add(classe);
-        // square[myHtml.savedIndex[0]].classList.remove(myHtml.savedClasses[1][2]);
         });
         console.log(myHtml.savedIndex, game.numberOfCards);
         if (myHtml.savedIndex[0] >= game.numberOfCards && myHtml.savedIndex[0] < square.length - game.numberOfCards) {
@@ -112,8 +105,8 @@ document.querySelector('button').onclick = function () {
         if (myHtml.counter === game.numberOfCards) {
           myHtml.player = myHtml.players[1];
           myHtml.printTurn();
-          myHtml.toggleAll('Player1')
-          myHtml.toggleAll('Player2')
+          myHtml.toggleAll('Player1');
+          myHtml.toggleAll('Player2');
           setTimeout(() => {
             window.alert('Player 2 position your pieces');
           }, 500);
@@ -121,8 +114,8 @@ document.querySelector('button').onclick = function () {
         if (myHtml.counter === 2 * game.numberOfCards) {
           myHtml.player = myHtml.players[0];
           myHtml.printTurn();
-          myHtml.toggleAll('Player1')
-          myHtml.toggleAll('Player2')
+          myHtml.toggleAll('Player1');
+          myHtml.toggleAll('Player2');
           setTimeout(() => {
             window.alert('Time to Battle!');
           }, 500);
@@ -131,7 +124,6 @@ document.querySelector('button').onclick = function () {
     } /* end function */,
 
     movePiece(player, element, index) {
-      console.log(player, element, index);
       if (myHtml.savedIndex.length === 0) {
         if (element.classList[0] === player) {
           const line = Math.floor((index - game.numberOfCards) / game.boardWidth);
@@ -149,18 +141,16 @@ document.querySelector('button').onclick = function () {
       }
 
       if (myHtml.savedIndex.length === 1) {
-        console.log('index sucesso', index, myHtml.savedIndex[0]);
         if (index - game.numberOfCards === myHtml.savedIndex[0]) {
           element.classList.toggle('active');
           myHtml.savedClasses = [];
           myHtml.savedIndex = [];
           return;
         }
-        console.log('sucesso', myHtml.savedIndex, index);
         if (element.classList[0] !== player && game.checkDistance(myHtml.savedIndex[0], index - game.numberOfCards)) {
           myHtml.savedClasses.push(element.classList.value.split(' '));
           myHtml.savedIndex.push(index - game.numberOfCards);
-        // console.log(myHtml.savedIndex)
+          console.log('sucesso', myHtml.savedIndex, index);
         } else {
           return window.alert(`${player}, you can only walk 1 square at a time`);
         }
@@ -180,97 +170,92 @@ document.querySelector('button').onclick = function () {
         });
         myHtml.savedClasses = [];
         myHtml.savedIndex = [];
-        myHtml.toggleAll('Player1')
-        myHtml.toggleAll('Player2')
-      } else { //here is if there was a confront
-          this.toggleCard(myHtml.savedIndex[1]+game.numberOfCards)
-            console.log('estou funcionando')
-            setTimeout(()=>{
-              this.toggleCard(myHtml.savedIndex[1]+game.numberOfCards)
-              switch (game.confront(myHtml.savedIndex[0], myHtml.savedIndex[1])) {
-                case 0:
-                  window.alert(`${player} captured the Flag and won`);
-                  break;
-    
-                case 1:
-                case 5:
-                case 6:
-                  square[myHtml.savedIndex[0] + game.numberOfCards].classList = 'square';
-                  square[myHtml.savedIndex[1] + game.numberOfCards].classList = '';
-    
-                  myHtml.savedClasses[0].forEach((classe) => {
-                    square[myHtml.savedIndex[1] + game.numberOfCards].classList.add(classe);
-                  });
-                  break;
-    
-                case 2:
-                  square[myHtml.savedIndex[0] + game.numberOfCards].classList = 'square';
-                  break;
-    
-                case 3:
-                case 4:
-                  square[myHtml.savedIndex[0] + game.numberOfCards].classList = 'square';
-                  square[myHtml.savedIndex[1] + game.numberOfCards].classList = 'square';
-                  break;
-              }
-  
-  
-            if(!this.gameOver(player)){
-              console.log('checando game over antes de alterar',game.gameOver)
-                myHtml.savedClasses = [];
-                myHtml.savedIndex = [];
-                myHtml.toggleAll('Player1')
-                myHtml.toggleAll('Player2')
-  
-            }
+        myHtml.toggleAll('Player1');
+        myHtml.toggleAll('Player2');
+      } else { // here is if there was a confront
+        this.toggleCard(myHtml.savedIndex[1] + game.numberOfCards);
+        console.log('estou funcionando');
+        setTimeout(() => {
+          this.toggleCard(myHtml.savedIndex[1] + game.numberOfCards);
+          switch (game.confront(myHtml.savedIndex[0], myHtml.savedIndex[1])) {
+            case 0:
+              window.alert(`${player} captured the Flag and won`);
+              break;
 
-            })
+            case 1:
+            case 5:
+            case 6:
+              square[myHtml.savedIndex[0] + game.numberOfCards].classList = 'square';
+              square[myHtml.savedIndex[1] + game.numberOfCards].classList = '';
+
+              myHtml.savedClasses[0].forEach((classe) => {
+                square[myHtml.savedIndex[1] + game.numberOfCards].classList.add(classe);
+              });
+              break;
+
+            case 2:
+              square[myHtml.savedIndex[0] + game.numberOfCards].classList = 'square';
+              break;
+
+            case 3:
+            case 4:
+              square[myHtml.savedIndex[0] + game.numberOfCards].classList = 'square';
+              square[myHtml.savedIndex[1] + game.numberOfCards].classList = 'square';
+              break;
+          }
 
 
+          if (!this.gameOver(player)) {
+            console.log('checando game over antes de alterar', game.gameOver);
+            myHtml.savedClasses = [];
+            myHtml.savedIndex = [];
+            myHtml.toggleAll('Player1');
+            myHtml.toggleAll('Player2');
+          }
+        });
       }
 
       this.changePlayer(player);
       myHtml.printTurn(myHtml.player);
     },
 
-    gameOver(player){
-
-      let otherPlayer = 'Player1'
-      if(player === 'Player1'){
-        otherPlayer = 'Player2'
+    gameOver(player) {
+      let otherPlayer = 'Player1';
+      if (player === 'Player1') {
+        otherPlayer = 'Player2';
       }
 
-      switch(true){
+      switch (true) {
         case (game.checkIfOver('Player1') && game.checkIfOver('Player2')):
-          this.toggleAll(otherPlayer)
-          square.forEach((element)=>{
-            element.classList.add('blocked')
-          })
-           window.alert('It was a tie, both players have no moving pieces')
-           return true
-          
+          this.toggleAll(otherPlayer);
+          square.forEach((element) => {
+            element.classList.add('blocked');
+          });
+          window.alert('It was a tie, both players have no moving pieces');
+          return true;
+
         case (game.checkIfOver('Player1')):
-            this.toggleAll(otherPlayer)
-            square.forEach((element)=>{
-              element.classList.add('blocked')
-            })
-          window.alert('Player 2 won! Player 1 has not more moves')
-          return true
+          this.toggleAll(otherPlayer);
+          square.forEach((element) => {
+            element.classList.add('blocked');
+          });
+          window.alert('Player 2 won! Player 1 has not more moves');
+          return true;
 
         case (game.checkIfOver('Player2')):
-            this.toggleAll(otherPlayer)
-            square.forEach((element)=>{
-              element.classList.add('blocked')
-            })
-           window.alert('Player 1 won! Player 2 has no more moves')
-           return true
+          this.toggleAll(otherPlayer);
+          square.forEach((element) => {
+            element.classList.add('blocked');
+          });
+          window.alert('Player 1 won! Player 2 has no more moves');
+          return true;
 
         case (game.gameOver === true):
-            this.toggleAll(otherPlayer)
-            square.forEach((element)=>{
-              element.classList.add('blocked')
-            })
-            return true
+          this.toggleAll(otherPlayer);
+          square.forEach((element) => {
+            element.classList.add('blocked');
+          });
+          return true;
       }
     },
 
@@ -283,17 +268,14 @@ document.querySelector('button').onclick = function () {
     },
 
     calculateIndexToMatrix(index) {
-      //console.log('entrei', index)
       if (index < game.numberOfCards) {
-        //console.log('calculate 1')
         return index;
       }
       if (index >= game.numberOfCards && index < square.length - game.numberOfCards) {
-        //console.log('calculate 2', index - game.numberOfCards)
         return index - game.numberOfCards;
       }
       if (index >= square.length - game.numberOfCards) {
-        //console.log('calculate 3')
+        // console.log('calculate 3')
         return index - square.length + game.numberOfCards;
       }
     },
@@ -302,23 +284,19 @@ document.querySelector('button').onclick = function () {
       switch (true) {
         case (index < game.numberOfCards):
           if (game.boardPlayer[myHtml.players.indexOf(player)][index].name !== null) {
-            //console.log(index, player, myHtml.players.indexOf(player), 'gameboardplayer', game.boardPlayer[myHtml.players.indexOf(player)][index])
             square[index].classList.toggle(game.boardPlayer[myHtml.players.indexOf(player)][index].name);
           }
           break;
 
         case (index >= game.numberOfCards && index < square.length - game.numberOfCards):
-          //console.log(myHtml.calculateIndexToMatrix(index), game.boardWidth)
           const line1 = Math.floor(myHtml.calculateIndexToMatrix(index) / game.boardWidth);
           const column1 = myHtml.calculateIndexToMatrix(index) % game.boardWidth;
-          //console.log(line1, column1)
-          if (game.board[line1][column1]!==null) {
+          if (game.board[line1][column1] !== null) {
             square[index].classList.toggle(game.board[line1][column1].name);
           }
           break;
 
         case (index >= square.length - game.numberOfCards):
-          //console.log(this.calculateIndexToMatrix(index))
           if (game.boardPlayer[this.players.indexOf(player)][this.calculateIndexToMatrix(index)] !== null) {
             square[index].classList.toggle(game.boardPlayer[this.players.indexOf(player)][this.calculateIndexToMatrix(index)].name);
           }
@@ -328,7 +306,6 @@ document.querySelector('button').onclick = function () {
     toggleAll(player) {
       square.forEach((element, index) => {
         if (element.classList[0] === player) {
-          //console.log('toggleall', index)
           this.toggleCard(index, player);
         }
       });
@@ -350,13 +327,13 @@ document.querySelector('button').onclick = function () {
   myHtml.playerPieces();
   myHtml.loadList();
   const square = document.querySelectorAll('.square');
-  
+
 
   setTimeout(() => {
-    //window.alert('Player 1 position your pieces');
+    window.alert('Player 1 position your pieces');
   }, 500);
   myHtml.printTurn();
-  myHtml.toggleAll('Player2')
+  myHtml.toggleAll('Player2');
   square.forEach((element, index) => {
     element.onclick = function () {
       switch (true) {

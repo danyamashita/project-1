@@ -141,7 +141,6 @@ class frontGame {
         return 0;
 
       case (defender.name === 'Bomb'):
-        console.log(attacker.name)
         if(attacker.name !== 'BombDefuser' && attacker.name !== 'Marshal'){
           this.board[line1][column1] = null;
           this.board[line2][column2] = null;
@@ -169,7 +168,7 @@ class frontGame {
         return 1;
 
       case (attacker.level < defender.level):
-        window.alert(`Defense was sucessful. Defense shows a ${defender.name} and Attacker shows a ${atacker.name}`);
+        window.alert(`Defense was sucessful. Defense shows a ${defender.name} and Attacker shows a ${attacker.name}`);
         this.board[line1][column1] = null;
         console.log(this.board);
         return 2;
