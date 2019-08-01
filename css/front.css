@@ -1,0 +1,151 @@
+body{
+  width:100%;
+  height: 920px;
+  margin: 0 auto 0 auto;
+  background-image: url('../pictures/war.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+
+}
+
+#player-1{
+  display:flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+  margin: 100px auto 0 auto;
+}
+
+#player-2{
+  display:flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 50px auto;
+}
+
+#main{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+#left {
+  width: 150px;
+  text-align: left;
+  color: white;
+  font-weight: bold;
+  font-size: 30px;
+}
+
+ul {
+  list-style-type: none;
+  margin-left: -30px;
+  font-size: 20px;
+  font-weight: normal;
+}
+
+#right{
+  width: 150px;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  font-size: 30px;
+}
+
+#board{
+  /*width: 850px;*/
+  margin: 20px auto 20px auto;
+  display:flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  /* background-image: url('./pictures/war2.jpg'); */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  padding: 15px;
+
+}
+
+.square {
+  background-color: white;
+  width:60px;
+  height: 60px;
+	margin:5px;
+	/*padding:20px;*/
+  font-size:64px;
+  opacity: 0.5;
+}
+
+.Player1 {
+  background:  lightcoral;
+  opacity: 1;
+}
+
+.Player2 {
+  background:  #456783;
+  opacity: 1;
+}
+
+.icon{
+  width: 60px;
+  height: 60px;
+}
+
+.BombDefuser {
+  background-image: url('../pictures/defuser.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 30px 30px;
+}
+
+.Soldier {
+  background-image: url('../pictures/soldier.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 30px 30px;
+}
+
+.Sergeant {
+  background-image: url('../pictures/sergeant.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 30px 30px;
+}
+
+.Flag {
+  background-image: url('../pictures/white-flag.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 30px 30px;
+}
+
+.Bomb {
+  background-image: url('../pictures/bomb.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 30px 30px;
+}
+
+.blocked {
+  pointer-events: none;
+}
+
+.active {
+  border: solid 2px purple
+}
+
+.playerboard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#turn {
+  margin: -20px auto 0 auto;
+}
+
+button{
+  margin-top: 50px;
+}

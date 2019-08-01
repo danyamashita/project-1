@@ -3,28 +3,29 @@ class frontGame {
     this.boardWidth = width;
     this.boardHeight = height;
     this.board = [];
+    this.gameOver = false;
     this.boardPlayer = [[], []];
     this.numberOfCards = numberOfCards;
     this.numberOfDifusers = Math.round(this.numberOfCards / 4);
-    this.numberOfSergeants = Math.ceil(this.numberOfCards / 10);
+    this.numberOfSergeants = Math.ceil(this.numberOfCards / 8);
     this.numberOfBombs = Math.round(this.numberOfCards / 5);
     this.numbersOfOthers = this.numberOfBombs+this.numberOfDifusers+this.numberOfSergeants+1
     this.playerTurn = 1;
     this.cards = [
       {
-        name: 'BombDefuser', qty: this.numberOfDifusers, level: 2, img: 'bomb.png',
-      },
-      {
-        name: 'Sergeant', qty: this.numberOfSergeants, level: 3, img: 'sergeant.png',
-      },
-      {
-        name: 'Flag', qty: 1, level: 0, img: 'flag.png',
+        name: 'Flag', qty: 1, level: 0, img: 'white-flag.png',
       },
       {
         name: 'Bomb', qty: this.numberOfBombs, level: 0, img: 'bomb.png',
       },
       {
         name: 'Soldier', qty: this.numberOfCards - this.numbersOfOthers, level: 1, img: 'soldier.png',
+      },
+      {
+        name: 'BombDefuser', qty: this.numberOfDifusers, level: 2, img: 'defuser.png',
+      },
+      {
+        name: 'Sergeant', qty: this.numberOfSergeants, level: 3, img: 'sergeant.png',
       },
     ];
   }
@@ -97,6 +98,22 @@ class frontGame {
     }
   }
 
+  checkIfOver(player){
+    console.log('completeboard', this.board)
+    for(let i = 0 ; i < this.boardHeight; i++){
+      for (let j = 0; j < this.boardWidth; j++){
+        console.log('board', i, j, this.board[i][j])
+        if(this.board[i][j] !== null && this.board[i][j].player === player) {
+          if(this.board[i][j].level !== 0){
+            return false
+          }
+        }
+      }
+    }
+    this.gameOver = true;
+    return true
+  }
+
 
   confront(attackerPosition, defenderPosition) {
     const line1 = Math.floor(attackerPosition / this.boardWidth);
@@ -110,59 +127,44 @@ class frontGame {
 
     switch (true) {
       case (defender.name === 'Flag' || attacker.name === 'Flag'):
+        this.gameOver=true;
         return 0;
 
       case (defender.name === 'Bomb'):
-        this.board[line1][column1] = null;
-        this.board[line2][column2] = null;
-        console.log(game.board);
-        window.alert('Kaboom!!!');
-        return 4;
+        console.log(attacker.name)
+        if(attacker.name !== 'BombDefuser'){
+          this.board[line1][column1] = null;
+          this.board[line2][column2] = null;
+          console.log(this.board);
+          window.alert('Kaboom!!!');
+          return 4;
+        } else {
+          this.board[line2][column2] = attacker;
+          this.board[line1][column1] = null;
+          window.alert('Bomb Defused!')
+          console.log(this.board);
+          return 5;
+        }
 
       case (attacker.level > defender.level):
         this.board[line2][column2] = attacker;
         this.board[line1][column1] = null;
         window.alert('Attack was sucessful');
-        console.log(game.board);
+        console.log(this.board);
         return 1;
 
       case (attacker.level < defender.level):
         window.alert('Defence was sucessful');
         this.board[line1][column1] = null;
-        console.log(game.board);
+        console.log(this.board);
         return 2;
 
       case (attacker.level === defender.level):
         this.board[line1][column1] = null;
         this.board[line2][column2] = null;
-        console.log(game.board);
+        console.log(this.board);
         window.alert('it was a tied, both died');
         return 3;
     }
   }
 }
-
-
-// game.movePiece();
-// const game = new frontGame(5, 5);
-// game.populatePlayerField();
-/*
-game.board = [
-  [cards[1], null, null, null, null],
-  [null, null, null, null, null],
-  [null, null, null, null, null],
-  [null, null, null, null, null],
-  [null, null, null, null, null],
-];
-
-game.movePiece(0, 5);
-
-game.createBoard();
-console.log(game.board, game.boardPlayer[0]);
-game.positionPiece(1, 5, 0);
-console.log(game.board);
-game.movePiece(5, 1);
-console.log(game.board);
-
-console.log(game.checkFinal(1, 1, 0, 1));
-*/
