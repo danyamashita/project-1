@@ -6,10 +6,13 @@ class frontGame {
     this.gameOver = false;
     this.boardPlayer = [[], []];
     this.numberOfCards = numberOfCards;
-    this.numberOfDifusers = Math.round(this.numberOfCards / 4);
-    this.numberOfSergeants = Math.ceil(this.numberOfCards / 8);
-    this.numberOfBombs = Math.round(this.numberOfCards / 5);
-    this.numbersOfOthers = this.numberOfBombs+this.numberOfDifusers+this.numberOfSergeants+1
+    this.numberOfDifusers = Math.ceil(this.numberOfCards / 8);
+    this.numberOfSergeants = Math.ceil(this.numberOfCards / 10);
+    this.numberOfLieutenant = Math.round(this.numberOfCards / 10);;
+    this.numberOfMarshal = 1;
+    this.numberOfSpy = 1;
+    this.numberOfBombs = Math.ceil(this.numberOfCards / 5);
+    this.numbersOfOthers = this.numberOfBombs + this.numberOfDifusers + this.numberOfSergeants + 3 +this.numberOfLieutenant;
     this.playerTurn = 1;
     this.cards = [
       {
@@ -26,6 +29,15 @@ class frontGame {
       },
       {
         name: 'Sergeant', qty: this.numberOfSergeants, level: 3, img: 'sergeant.png',
+      },
+      {
+        name: 'Lieutenant', qty: this.numberOfLieutenant, level: 4, img: 'lieutenant.png',
+      },
+      {
+        name: 'Marshal', qty: this.numberOfMarshal, level: 5, img: 'marshal.png',
+      },
+      {
+        name: 'Spy', qty: this.numberOfSpy, level: 1, img: 'spy.png',
       },
     ];
   }
@@ -98,20 +110,20 @@ class frontGame {
     }
   }
 
-  checkIfOver(player){
-    console.log('completeboard', this.board)
-    for(let i = 0 ; i < this.boardHeight; i++){
-      for (let j = 0; j < this.boardWidth; j++){
-        console.log('board', i, j, this.board[i][j])
-        if(this.board[i][j] !== null && this.board[i][j].player === player) {
-          if(this.board[i][j].level !== 0){
-            return false
+  checkIfOver(player) {
+    console.log('completeboard', this.board);
+    for (let i = 0; i < this.boardHeight; i++) {
+      for (let j = 0; j < this.boardWidth; j++) {
+        console.log('board', i, j, this.board[i][j]);
+        if (this.board[i][j] !== null && this.board[i][j].player === player) {
+          if (this.board[i][j].level !== 0) {
+            return false;
           }
         }
       }
     }
     this.gameOver = true;
-    return true
+    return true;
   }
 
 
@@ -123,8 +135,6 @@ class frontGame {
     const attacker = this.board[line1][column1];
     const defender = this.board[line2][column2];
 
-    console.log(`Attacker shows a ${attacker.name} and Defender shows a ${defender.name}`);
-
     switch (true) {
       case (defender.name === 'Flag' || attacker.name === 'Flag'):
         this.gameOver=true;
@@ -132,29 +142,34 @@ class frontGame {
 
       case (defender.name === 'Bomb'):
         console.log(attacker.name)
-        if(attacker.name !== 'BombDefuser'){
+        if(attacker.name !== 'BombDefuser' && attacker.name !== 'Marshal'){
           this.board[line1][column1] = null;
           this.board[line2][column2] = null;
           console.log(this.board);
           window.alert('Kaboom!!!');
           return 4;
-        } else {
+        } 
           this.board[line2][column2] = attacker;
           this.board[line1][column1] = null;
           window.alert('Bomb Defused!')
           console.log(this.board);
           return 5;
-        }
+        
+      case (attacker.name === 'Spy'):
+          this.board[line2][column2] = attacker;
+          this.board[line1][column1] = null;
+          window.alert(`${defender.name} was assassinated`)
+          return 6
 
       case (attacker.level > defender.level):
         this.board[line2][column2] = attacker;
         this.board[line1][column1] = null;
-        window.alert('Attack was sucessful');
+        window.alert(`Attack was sucessful. Attacker shows a ${attacker.name} and Defender shows a ${defender.name}`);
         console.log(this.board);
         return 1;
 
       case (attacker.level < defender.level):
-        window.alert('Defence was sucessful');
+        window.alert(`Defense was sucessful. Defense shows a ${defender.name} and Attacker shows a ${atacker.name}`);
         this.board[line1][column1] = null;
         console.log(this.board);
         return 2;
@@ -163,7 +178,7 @@ class frontGame {
         this.board[line1][column1] = null;
         this.board[line2][column2] = null;
         console.log(this.board);
-        window.alert('it was a tied, both died');
+        window.alert(`It was a tie, both died. Both players shows ${defender.name}`);
         return 3;
     }
   }

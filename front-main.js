@@ -1,4 +1,6 @@
 
+
+
 document.querySelector('button').onclick = function () {
 
   const myHtml = {
@@ -180,45 +182,49 @@ document.querySelector('button').onclick = function () {
         myHtml.savedIndex = [];
         myHtml.toggleAll('Player1')
         myHtml.toggleAll('Player2')
-      } else {
-          //this.toggleCard(myHtml.savedIndex[1]+game.numberOfCards)
-          setTimeout(()=>{
+      } else { //here is if there was a confront
+          this.toggleCard(myHtml.savedIndex[1]+game.numberOfCards)
             console.log('estou funcionando')
-            //this.toggleCard(myHtml.savedIndex[1]+game.numberOfCards)
+            setTimeout(()=>{
+              this.toggleCard(myHtml.savedIndex[1]+game.numberOfCards)
+              switch (game.confront(myHtml.savedIndex[0], myHtml.savedIndex[1])) {
+                case 0:
+                  window.alert(`${player} captured the Flag and won`);
+                  break;
+    
+                case 1:
+                case 5:
+                case 6:
+                  square[myHtml.savedIndex[0] + game.numberOfCards].classList = 'square';
+                  square[myHtml.savedIndex[1] + game.numberOfCards].classList = '';
+    
+                  myHtml.savedClasses[0].forEach((classe) => {
+                    square[myHtml.savedIndex[1] + game.numberOfCards].classList.add(classe);
+                  });
+                  break;
+    
+                case 2:
+                  square[myHtml.savedIndex[0] + game.numberOfCards].classList = 'square';
+                  break;
+    
+                case 3:
+                case 4:
+                  square[myHtml.savedIndex[0] + game.numberOfCards].classList = 'square';
+                  square[myHtml.savedIndex[1] + game.numberOfCards].classList = 'square';
+                  break;
+              }
+  
+  
+            if(!this.gameOver(player)){
+              console.log('checando game over antes de alterar',game.gameOver)
+                myHtml.savedClasses = [];
+                myHtml.savedIndex = [];
+                myHtml.toggleAll('Player1')
+                myHtml.toggleAll('Player2')
+  
+            }
 
-          }, 500)
-          switch (game.confront(myHtml.savedIndex[0], myHtml.savedIndex[1])) {
-            case 0:
-              window.alert(`${player} captured the Flag and won`);
-              break;
-
-            case 1:
-            case 5:
-              square[myHtml.savedIndex[0] + game.numberOfCards].classList = 'square';
-              square[myHtml.savedIndex[1] + game.numberOfCards].classList = '';
-
-              myHtml.savedClasses[0].forEach((classe) => {
-                square[myHtml.savedIndex[1] + game.numberOfCards].classList.add(classe);
-              });
-              break;
-
-            case 2:
-              square[myHtml.savedIndex[0] + game.numberOfCards].classList = 'square';
-              break;
-
-            case 3:
-            case 4:
-              square[myHtml.savedIndex[0] + game.numberOfCards].classList = 'square';
-              square[myHtml.savedIndex[1] + game.numberOfCards].classList = 'square';
-              break;
-          }
-
-          if(!this.gameOver(player)){
-            myHtml.savedClasses = [];
-            myHtml.savedIndex = [];
-            myHtml.toggleAll('Player1')
-            myHtml.toggleAll('Player2')
-          }
+            })
 
 
       }
@@ -337,7 +343,7 @@ document.querySelector('button').onclick = function () {
   };
 
 
-  const game = new frontGame(4, 4, 4);
+  const game = new frontGame(8, 8, 16);
   game.populatePlayerField();
   game.createBoard();
   myHtml.drawBoard();
