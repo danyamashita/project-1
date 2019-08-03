@@ -1,4 +1,11 @@
-
+let initialBoardSize = 8;
+let initialBoard = document.querySelector('#board')
+for(let i=0; i< initialBoardSize; i++){
+  for (let j = 0; j < initialBoardSize; j++){
+    initialBoard.innerHTML += '<div class = "square"></div>';
+  }
+}
+initialBoard.style.width = '480px'
 
 document.querySelector('button').onclick = function () {
   const myHtml = {
