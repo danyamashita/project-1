@@ -1,11 +1,11 @@
 # Front
 Ironhack project 1
 
-Front is a board game from the 70's. Your goal is to capture enemy flag or kill or enermies
+Front is a board game from the 70's. Your goal is to capture enemy flag or kill all enermies
 
 ## Getting Started
 
-The game is turn based. Firs you position all your pieces and then the enemy position all his pieces, and finally the game begins with each one taking a turn and being able to move your pieces, one at a time. Moving pieces can go to any adjacent square.
+The game is turn based. First you position all your pieces and then the enemy position all his pieces, and finally the game begins with each one taking a turn and being able to move your pieces, one at a time. Moving pieces can go to any adjacent square.
 So far it was implemented the following pieces (in rank order):
 1. *Flag*: Your goal is to capture enemies flag. Guard it well
 2. *Bombs*: It can't move or attack but if any enemy with the exception of BombDefusers and Marshal steps on it, it will explode them.
